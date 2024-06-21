@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medición de Rendimiento del Procesador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .metric {
+            margin-bottom: 20px;
+        }
+        .metric h2 {
+            margin: 0 0 10px 0;
+        }
+        .metric p {
+            margin: 5px 0;
+        }
+        .description {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="description">
+        <h2>¿Para qué sirve el procesador en tu computador?</h2>
+        <p>El procesador es el cerebro de tu computador. Realiza todas las operaciones y tareas que permiten que tu equipo funcione. Desde abrir programas y navegar por internet hasta procesar datos y gráficos complejos en juegos, el procesador es crucial para el rendimiento y la velocidad de tu sistema.</p>
+    
+        <h2>¿Qué hacen estas mediciones?</h2>
+        
+        <p><strong>Velocidad de Trabajo:</strong> Mide cuántas operaciones puede realizar el procesador en un segundo. Es importante porque determina qué tan rápido puede realizar tareas.</p>
+        <p><strong>Uso de cada Núcleo:</strong> Muestra cuántas partes tiene tu procesador que pueden trabajar simultáneamente. Esto ayuda a manejar varias tareas a la vez.</p>
+        <p><strong>Capacidad de Multitarea:</strong> Estima cuántas tareas puede manejar al mismo tiempo, ayudando a mantener el rendimiento cuando varias aplicaciones están abiertas.</p>
+        <p><strong>Tiempo de Respuesta:</strong> Mide el tiempo que tarda el procesador en empezar a trabajar después de recibir una instrucción. Un menor tiempo de respuesta significa que tu computador se siente más rápido.</p>
+        <p><strong>Cantidad de Trabajo Realizado:</strong> Mide cuántas operaciones puede realizar el procesador en un segundo, indicando su capacidad de procesamiento general.</p>
+        </div>
+    <h1>Medición de Rendimiento del Procesador</h1>
+    <div class="metric" id="cpuSpeed">
+        <h2>Velocidad de Trabajo</h2>
+        <p id="cpuSpeedValue">Midiendo...</p>
+    </div>
+    <div class="metric" id="usage">
+        <h2>Uso de cada Núcleo</h2>
+        <p id="usageValue">Midiendo...</p>
+    </div>
+    <div class="metric" id="multitasking">
+        <h2>Capacidad de Multitarea</h2>
+        <p id="multitaskingValue">Midiendo...</p>
+    </div>
+    <div class="metric" id="responseTime">
+        <h2>Tiempo de Respuesta</h2>
+        <p id="responseTimeValue">Midiendo...</p>
+    </div>
+    <div class="metric" id="workDone">
+        <h2>Cantidad de Trabajo Realizado</h2>
+        <p id="workDoneValue">Midiendo...</p>
+    </div>
+    <button onclick="runMeasurements()">Repetir Medición</button>
+
+    
+
+    <script>
+        // Función para medir velocidad de trabajo
+        async function measureCpuSpeed() {
+            const iterations = 5;
+            let totalSpeed = 0;
+
+            for (let i = 0; i < iterations; i++) {
+                const start = performance.now();
+                let count = 0;
+                while (performance.now() - start < 1000) {
+                    count++;
+                }
+                totalSpeed += count;
+            }
+
+            const averageSpeed = totalSpeed / iterations;
+            document.getElementById('cpuSpeedValue').innerText = `${(averageSpeed / 1000).toFixed(2)} operaciones/ms (promedio de 5 mediciones)`;
+        }
+
+        // Función para medir uso de cada núcleo
+        function measureUsage() {
+            const cores = navigator.hardwareConcurrency || 'Desconocido';
+            document.getElementById('usageValue').innerText = `Número de núcleos: ${cores}`;
+        }
+
+        // Función para medir capacidad de multitarea
+        function measureMultitasking() {
+            const cores = navigator.hardwareConcurrency || 1;
+            const multitaskingValue = cores * 2;
+            document.getElementById('multitaskingValue').innerText = `Puede manejar aproximadamente ${multitaskingValue} tareas al mismo tiempo (estimado)`;
+        }
+
+        // Función para medir tiempo de respuesta
+        async function measureResponseTime() {
+            const iterations = 5;
+            let totalResponseTime = 0;
+
+            for (let i = 0; i < iterations; i++) {
+                const start = performance.now();
+                await new Promise(resolve => setTimeout(resolve, 100));
+                const end = performance.now();
+                totalResponseTime += (end - start);
+            }
+
+            const averageResponseTime = totalResponseTime / iterations;
+            document.getElementById('responseTimeValue').innerText = `${averageResponseTime.toFixed(2)} ms (promedio de 5 mediciones)`;
+        }
+
+        // Función para medir cantidad de trabajo realizado
+        async function measureWorkDone() {
+            const iterations = 5;
+            let totalWorkDone = 0;
+
+            for (let i = 0; i < iterations; i++) {
+                const start = performance.now();
+                let count = 0;
+                while (performance.now() - start < 1000) {
+                    count++;
+                }
+                totalWorkDone += count;
+            }
+
+            const averageWorkDone = totalWorkDone / iterations;
+            document.getElementById('workDoneValue').innerText = `Aproximadamente ${averageWorkDone} operaciones realizadas en 1 segundo (promedio de 5 mediciones)`;
+        }
+
+        // Ejecutar todas las mediciones
+        async function runMeasurements() {
+            document.getElementById('cpuSpeedValue').innerText = 'Midiendo...';
+            document.getElementById('usageValue').innerText = 'Midiendo...';
+            document.getElementById('multitaskingValue').innerText = 'Midiendo...';
+            document.getElementById('responseTimeValue').innerText = 'Midiendo...';
+            document.getElementById('workDoneValue').innerText = 'Midiendo...';
+
+            await measureCpuSpeed();
+            measureUsage();
+            measureMultitasking();
+            await measureResponseTime();
+            await measureWorkDone();
+        }
+
+        // Iniciar las mediciones al cargar la página
+        window.onload = runMeasurements;
+    </script>
+</body>
+</html>
